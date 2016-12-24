@@ -7,9 +7,11 @@ package ablack13.hierarchyadapter.adapter;
 public class Item {
     public String name;
     public int level;
+    public String parent;
 
-    public Item(String name, int level) {
+    public Item(String name, int level, String parent) {
         this.name = name;
         this.level = level;
+        this.parent = parent;
     }
 }
