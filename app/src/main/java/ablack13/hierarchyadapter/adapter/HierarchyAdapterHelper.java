@@ -113,6 +113,8 @@ public class HierarchyAdapterHelper {
             holder.rlContent.addView(view, topVerticalLineWidth, topVerticalLineHeight);
             view.setLayoutParams(params);
             linesViewIds.add(topVerticalLineViewId + locLevel);
+
+            drawAddditionalTopVerticalLine(holder, item, position);
         }
     }
 
@@ -131,7 +133,7 @@ public class HierarchyAdapterHelper {
             view.setLayoutParams(params);
             linesViewIds.add(bottomVerticalLineViewId + locLevel);
 
-//            drawAdditionalBottomVerticalLine(holder, item, position);
+            drawAdditionalBottomVerticalLine(holder, item, position);
         }
     }
 
@@ -180,21 +182,31 @@ public class HierarchyAdapterHelper {
         }
     }
 
-    void drawAdditionalBottomVerticalLine(HierarchyAdapter.ViewHolder holder, Item item, int position) {
-        String[] parents = item.grandParents;
-        if (parents != null && parents.length > 0) {
-            int locLevel = item.level;
-            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(bottomVerticalLineWidth, bottomVerticalLineHeight);
-            params.addRule(RelativeLayout.LEFT_OF, R.id.iv_icon);
-            params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-            params.rightMargin = bottomVerticalLineRightMargin;// + locMargin;
-            View view = new View(holder.rlContent.getContext());
-            view.setId(bottomVerticalLineViewId + locLevel);
-            view.setBackgroundColor(Color.GREEN);
-            holder.rlContent.addView(view, bottomVerticalLineWidth, bottomVerticalLineHeight);
-            view.setLayoutParams(params);
-            linesViewIds.add(bottomVerticalLineViewId + locLevel);
+
+    void drawAddditionalTopVerticalLine(HierarchyAdapter.ViewHolder holder, Item item, int position) {
+        int locLevel = item.level;
+        String[] grandParents = item.grandParents;
+        int locMargin = leftMargin;
+        if (item.level > 0 && grandParents != null && grandParents.length > 0) {
+            for (String grandParent : grandParents) {
+                if (hasPreviousParent(grandParent, position) && hasNextChild(grandParent, position)) {
+                    RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(topVerticalLineWidth, topVerticalLineHeight);
+                    params.addRule(RelativeLayout.LEFT_OF, R.id.iv_icon);
+                    params.rightMargin = topVerticalLineRightMargin + locMargin;
+                    View view = new View(holder.rlContent.getContext());
+                    view.setId(topVerticalLineViewId + locLevel);
+                    view.setBackgroundColor(Color.GREEN);
+                    holder.rlContent.addView(view, topVerticalLineWidth, topVerticalLineHeight);
+                    view.setLayoutParams(params);
+                    linesViewIds.add(topVerticalLineViewId + locLevel);
+                }
+                --locLevel;
+                locMargin += leftMargin;
+            }
         }
+    }
+
+    void drawAdditionalBottomVerticalLine(HierarchyAdapter.ViewHolder holder, Item item, int position) {
     }
 
     private boolean hasPreviousLevelItem(Item item, int position) {
@@ -221,7 +233,27 @@ public class HierarchyAdapterHelper {
         return hasNextLevelItem;
     }
 
-    private Item nextChildItem(Item item, int position) {
-        return null;
+    private boolean hasPreviousParent(String parent, int position) {
+        boolean hasPreviousParent = false;
+        for (int i = 0; i < position; i++) {
+            Item item = getAdapter().getItem(i);
+            if (item != null && item.name.equals(parent)) {
+                hasPreviousParent = true;
+                break;
+            }
+        }
+        return hasPreviousParent;
+    }
+
+    private boolean hasNextChild(String parent, int position) {
+        boolean hasNextChild = false;
+        for (int i = position; i < getAdapter().getItems().size(); i++) {
+            Item item = getAdapter().getItem(i);
+            if (item != null && item.parent.equals(parent)) {
+                hasNextChild = true;
+                break;
+            }
+        }
+        return hasNextChild;
     }
 }
