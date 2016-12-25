@@ -132,9 +132,8 @@ public class HierarchyAdapterHelper {
             holder.rlContent.addView(view, bottomVerticalLineWidth, bottomVerticalLineHeight);
             view.setLayoutParams(params);
             linesViewIds.add(bottomVerticalLineViewId + locLevel);
-
-            drawAdditionalBottomVerticalLine(holder, item, position);
         }
+        drawAdditionalBottomVerticalLine(holder, item, position);
     }
 
     void drawLeftHorizontalLine(HierarchyAdapter.ViewHolder holder, Item item, int position) {
@@ -207,6 +206,27 @@ public class HierarchyAdapterHelper {
     }
 
     void drawAdditionalBottomVerticalLine(HierarchyAdapter.ViewHolder holder, Item item, int position) {
+        int locLevel = item.level;
+        String[] grandParents = item.grandParents;
+        int locMargin = leftMargin;
+        if (item.level > 0 && grandParents != null && grandParents.length > 0) {
+            for (String grandParent : grandParents) {
+                if (hasPreviousParent(grandParent, position) && hasNextChild(grandParent, position)) {
+                    RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(bottomVerticalLineWidth, bottomVerticalLineHeight);
+                    params.addRule(RelativeLayout.LEFT_OF, R.id.iv_icon);
+                    params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+                    params.rightMargin = bottomVerticalLineRightMargin + locMargin;
+                    View view = new View(holder.rlContent.getContext());
+                    view.setId(bottomVerticalLineViewId + locLevel);
+                    view.setBackgroundColor(Color.MAGENTA);
+                    holder.rlContent.addView(view, bottomVerticalLineWidth, bottomVerticalLineHeight);
+                    view.setLayoutParams(params);
+                    linesViewIds.add(bottomVerticalLineViewId + locLevel);
+                }
+                --locLevel;
+                locMargin += leftMargin;
+            }
+        }
     }
 
     private boolean hasPreviousLevelItem(Item item, int position) {
