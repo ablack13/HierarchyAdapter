@@ -42,7 +42,6 @@ public class HierarchyAdapter extends RecyclerView.Adapter<HierarchyAdapter.View
     private int underCircleVerticalLineViewId;
     private int leftHorizontalLineViewId;
 
-    private int maxDrawLevel = 10;
     private List<Integer> linesViewIds;
     private static final AtomicInteger sNextGeneratedId = new AtomicInteger(1);
 
@@ -74,9 +73,8 @@ public class HierarchyAdapter extends RecyclerView.Adapter<HierarchyAdapter.View
     private int generateViewId() {
         for (; ; ) {
             final int result = sNextGeneratedId.get();
-            // aapt-generated IDs have the high byte nonzero; clamp to the range under that.
             int newValue = result + 1;
-            if (newValue > 0x00FFFFFF) newValue = 1; // Roll over to 1, not 0.
+            if (newValue > 0x00FFFFFF) newValue = 1;
             if (sNextGeneratedId.compareAndSet(result, newValue)) {
                 return result;
             }
@@ -135,10 +133,18 @@ public class HierarchyAdapter extends RecyclerView.Adapter<HierarchyAdapter.View
 
 
     public Item getNextLevelItem(int position) {
-        if ((position + 1) < getItemCount()) {
-            return items.get(position + 1);
+        Item item = getItem(position);
+        Item nextLevelItem = null;
+        if (item != null) {
+            for (int i = position; i < getItemCount(); i++) {
+                Item nextItem = getNextItem(i);
+                if (nextItem != null && nextItem.level == item.level) {
+                    nextLevelItem = nextItem;
+                    break;
+                }
+            }
         }
-        return null;
+        return nextLevelItem;
     }
 
     public void setItems(List<Item> items) {
@@ -168,44 +174,35 @@ public class HierarchyAdapter extends RecyclerView.Adapter<HierarchyAdapter.View
     }
 
     private void drawTopVerticalLine(ViewHolder holder, Item item, int position) {
-        if (item.level > 0 && !item.parent.equals(ROOT)) {
-            int locLevel = item.level;
-            int locMargin = 0;
-            while (locLevel != 0) {
-                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(topVerticalLineWidth, topVerticalLineHeight);
-                params.addRule(RelativeLayout.LEFT_OF, R.id.iv_icon);
-                params.rightMargin = topVerticalLineRightMargin + locMargin;
-                View view = new View(holder.rlContent.getContext());
-                view.setId(topVerticalLineViewId + locLevel);
-                view.setBackgroundColor(Color.GREEN);
-                holder.rlContent.addView(view, topVerticalLineWidth, topVerticalLineHeight);
-                view.setLayoutParams(params);
-                linesViewIds.add(topVerticalLineViewId + locLevel);
-                --locLevel;
-                locMargin += leftMargin;
-            }
+        int locLevel = item.level;
+        Item previousItem = getPreviousItem(position);
+        if (item.level > 0 && previousItem != null && (previousItem.name.equals(item.parent) || (previousItem.parent.equals(item.parent)))) {
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(topVerticalLineWidth, topVerticalLineHeight);
+            params.addRule(RelativeLayout.LEFT_OF, R.id.iv_icon);
+            params.rightMargin = topVerticalLineRightMargin;
+            View view = new View(holder.rlContent.getContext());
+            view.setId(topVerticalLineViewId + locLevel);
+            view.setBackgroundColor(Color.BLUE);
+            holder.rlContent.addView(view, topVerticalLineWidth, topVerticalLineHeight);
+            view.setLayoutParams(params);
+            linesViewIds.add(topVerticalLineViewId + locLevel);
         }
     }
 
     private void drawBottomVerticalLine(ViewHolder holder, Item item, int position) {
-        if (item.level > 0 && !item.parent.equals(ROOT)) {
-            int locLevel = item.level;
-            int locMargin = 0;
-            while (locLevel != 0) {
-                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(bottomVerticalLineWidth, bottomVerticalLineHeight);
-                params.addRule(RelativeLayout.LEFT_OF, R.id.iv_icon);
-                params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-                params.rightMargin = bottomVerticalLineRightMargin + locMargin;
-                View view = new View(holder.rlContent.getContext());
-                view.setId(bottomVerticalLineViewId + locLevel);
-                view.setBackgroundColor(Color.RED);
-                holder.rlContent.addView(view, bottomVerticalLineWidth, bottomVerticalLineHeight);
-                view.setLayoutParams(params);
-                linesViewIds.add(bottomVerticalLineViewId + locLevel);
-                --locLevel;
-                locMargin += leftMargin;
-            }
-
+        int locLevel = item.level;
+        Item nextItem = getNextItem(position);
+        if (!item.parent.equals(ROOT) && nextItem != null && nextItem.parent.equals(item.parent)) {
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(bottomVerticalLineWidth, bottomVerticalLineHeight);
+            params.addRule(RelativeLayout.LEFT_OF, R.id.iv_icon);
+            params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+            params.rightMargin = bottomVerticalLineRightMargin;// + locMargin;
+            View view = new View(holder.rlContent.getContext());
+            view.setId(bottomVerticalLineViewId + locLevel);
+            view.setBackgroundColor(Color.RED);
+            holder.rlContent.addView(view, bottomVerticalLineWidth, bottomVerticalLineHeight);
+            view.setLayoutParams(params);
+            linesViewIds.add(bottomVerticalLineViewId + locLevel);
         }
     }
 
@@ -227,16 +224,19 @@ public class HierarchyAdapter extends RecyclerView.Adapter<HierarchyAdapter.View
     }
 
     private void drawUnderCircleVerticalLine(ViewHolder holder, Item item, int position) {
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(underCircleLineWidth, underCircleLineHeight);
-        params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-        params.addRule(RelativeLayout.RIGHT_OF, R.id.iv_icon);
-        params.leftMargin = underCircleLineRightMargin;
-        View view = new View(holder.rlContent.getContext());
-        view.setId(underCircleVerticalLineViewId);
-        view.setBackgroundColor(Color.RED);
-        holder.rlContent.addView(view, underCircleLineWidth, underCircleLineHeight);
-        view.setLayoutParams(params);
-        linesViewIds.add(underCircleVerticalLineViewId);
+        Item nextItem = getNextItem(position);
+        if (nextItem != null && nextItem.parent.equals(item.name)) {
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(underCircleLineWidth, underCircleLineHeight);
+            params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+            params.addRule(RelativeLayout.RIGHT_OF, R.id.iv_icon);
+            params.leftMargin = underCircleLineRightMargin;
+            View view = new View(holder.rlContent.getContext());
+            view.setId(underCircleVerticalLineViewId);
+            view.setBackgroundColor(Color.RED);
+            holder.rlContent.addView(view, underCircleLineWidth, underCircleLineHeight);
+            view.setLayoutParams(params);
+            linesViewIds.add(underCircleVerticalLineViewId);
+        }
     }
 
     private void removeAllDrawables(ViewHolder holder) {
