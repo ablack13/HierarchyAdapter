@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="hierarchy_leftMargin">16dp</dimen>
+    <dimen name="hierarchy_underCircleLineWidth">2dp</dimen>
+    <dimen name="hierarchy_underCircleLineHeight">22dp</dimen>
+    <dimen name="hierarchy_underCircleLineRightMargin">-18dp</dimen>
+    <dimen name="hierarchy_topVerticalLineWidth">2dp</dimen>
+    <dimen name="hierarchy_topVerticalLineHeight">32dp</dimen>
+    <dimen name="hierarchy_topVerticalLineRightMargin">8dp</dimen>
+    <dimen name="hierarchy_bottomVerticalLineWidth">2dp</dimen>
+    <dimen name="hierarchy_bottomVerticalLineHeight">32dp</dimen>
+    <dimen name="hierarchy_bottomVerticalLineRightMargin">8dp</dimen>
+    <dimen name="hierarchy_leftHorizontalLineWidth">8dp</dimen>
+    <dimen name="hierarchy_leftHorizontalLineHeight">2dp</dimen>
+    <dimen name="hierarchy_leftHorizontalLineRightMargin">2dp</dimen>
+
+    <color name="hierarchy_lineColor">#a33939</color>
+</resources>
