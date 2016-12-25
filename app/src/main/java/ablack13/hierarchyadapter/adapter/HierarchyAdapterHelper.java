@@ -103,7 +103,7 @@ public class HierarchyAdapterHelper {
     void drawTopVerticalLine(HierarchyAdapter.ViewHolder holder, Item item, int position) {
         int locLevel = item.level;
         Item previousItem = getAdapter().getPreviousItem(position);
-        if (item.level > 0 && previousItem != null && (previousItem.name.equals(item.parent) || (previousItem.parent.equals(item.parent)))) {
+        if (item.level > 0 && previousItem != null && (previousItem.name.equals(item.parent) || (previousItem.parent.equals(item.parent)) || hasPreviousLevelItem(item, position))) {
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(topVerticalLineWidth, topVerticalLineHeight);
             params.addRule(RelativeLayout.LEFT_OF, R.id.iv_icon);
             params.rightMargin = topVerticalLineRightMargin;
@@ -195,6 +195,18 @@ public class HierarchyAdapterHelper {
             view.setLayoutParams(params);
             linesViewIds.add(bottomVerticalLineViewId + locLevel);
         }
+    }
+
+    private boolean hasPreviousLevelItem(Item item, int position) {
+        boolean hasPreviousLevelItem = false;
+        for (int i = 0; i < position; i++) {
+            Item tempItem = getAdapter().getItem(i);
+            if (tempItem != null && tempItem.parent.equals(item.parent)) {
+                hasPreviousLevelItem = true;
+                break;
+            }
+        }
+        return hasPreviousLevelItem;
     }
 
     private boolean hasNextLevelItem(Item item, int position) {
