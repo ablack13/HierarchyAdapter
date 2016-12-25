@@ -8,7 +8,7 @@ import java.util.List;
  * Created by ablack13 on 25.12.16.
  */
 
-public interface IHierarchyAdapter<T extends HierarchyItem, VH extends RecyclerViewHierarchyAdapter.HierarchyViewHolder> {
+interface IHierarchyListAdapter<T extends HierarchyItem, VH extends ListViewHierarchyAdapter.HierarchyViewHolder> {
     void onDettach();
 
     void onBindHierarchyViewHolder(VH holder, int position);

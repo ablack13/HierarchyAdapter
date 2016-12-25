@@ -14,7 +14,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Created by ablack13 on 25.12.16.
  */
 
-public class HierarchyAdapterHelper<T extends HierarchyItem, VH extends RecyclerViewHierarchyAdapter.HierarchyViewHolder> {
+class HierarchyListViewAdapterHelper<T extends HierarchyItem, VH extends ListViewHierarchyAdapter.HierarchyViewHolder> {
     private static final AtomicInteger sNextGeneratedId = new AtomicInteger(1);
     private static final String ROOT = "root";
 
@@ -38,11 +38,11 @@ public class HierarchyAdapterHelper<T extends HierarchyItem, VH extends Recycler
     private int leftHorizontalLineViewId;
     private float density;
     private List<Integer> linesViewIds;
-    private WeakReference<RecyclerViewHierarchyAdapter<T, VH>> adapter;
+    private WeakReference<ListViewHierarchyAdapter<T, VH>> adapter;
 
     private int lineColor;
 
-    public HierarchyAdapterHelper(Context context, RecyclerViewHierarchyAdapter<T, VH> adapter) {
+    public HierarchyListViewAdapterHelper(Context context, ListViewHierarchyAdapter<T, VH> adapter) {
         this.adapter = new WeakReference<>(adapter);
         this.density = context.getResources().getDisplayMetrics().density;
         this.leftMargin = (int) context.getResources().getDimension(R.dimen.hierarchy_leftMargin);
@@ -58,7 +58,7 @@ public class HierarchyAdapterHelper<T extends HierarchyItem, VH extends Recycler
         this.leftHorizontalLineWidth = (int) context.getResources().getDimension(R.dimen.hierarchy_leftHorizontalLineWidth);
         this.leftHorizontalLineHeight = (int) context.getResources().getDimension(R.dimen.hierarchy_leftHorizontalLineHeight);
         this.leftHorizontalLineRightMargin = (int) context.getResources().getDimension(R.dimen.hierarchy_leftHorizontalLineRightMargin);
-        this.lineColor = context.getColor(R.color.hierarchy_lineColor);
+        this.lineColor = context.getResources().getColor(R.color.hierarchy_lineColor);
 
         topVerticalLineViewId = generateViewId();
         bottomVerticalLineViewId = generateViewId();
@@ -162,17 +162,17 @@ public class HierarchyAdapterHelper<T extends HierarchyItem, VH extends Recycler
         }
     }
 
-    private RecyclerViewHierarchyAdapter getAdapter() {
+    private ListViewHierarchyAdapter getAdapter() {
         return adapter != null ? adapter.get() : null;
     }
 
-    void setLeftMargin(RecyclerViewHierarchyAdapter.HierarchyViewHolder holder, HierarchyItem item) {
+    void setLeftMargin(ListViewHierarchyAdapter.HierarchyViewHolder holder, HierarchyItem item) {
         ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) holder.margin.getLayoutParams();
         params.leftMargin = leftMargin * item.getLevel();
         holder.margin.setLayoutParams(params);
     }
 
-    void drawTopVerticalLine(RecyclerViewHierarchyAdapter.HierarchyViewHolder holder, HierarchyItem item, int position) {
+    void drawTopVerticalLine(ListViewHierarchyAdapter.HierarchyViewHolder holder, HierarchyItem item, int position) {
         int locLevel = item.getLevel();
         HierarchyItem previousItem = getPreviousItem(position);
         if (item.getLevel() > 0
@@ -195,7 +195,7 @@ public class HierarchyAdapterHelper<T extends HierarchyItem, VH extends Recycler
         }
     }
 
-    void drawBottomVerticalLine(RecyclerViewHierarchyAdapter.HierarchyViewHolder holder, HierarchyItem item, int position) {
+    void drawBottomVerticalLine(ListViewHierarchyAdapter.HierarchyViewHolder holder, HierarchyItem item, int position) {
         int locLevel = item.getLevel();
         HierarchyItem nextItem = getNextItem(position);
         if (!item.getParentKey().equals(ROOT)
@@ -217,7 +217,7 @@ public class HierarchyAdapterHelper<T extends HierarchyItem, VH extends Recycler
         drawAdditionalBottomVerticalLine(holder, item, position);
     }
 
-    void drawLeftHorizontalLine(RecyclerViewHierarchyAdapter.HierarchyViewHolder holder, HierarchyItem item, int position) {
+    void drawLeftHorizontalLine(ListViewHierarchyAdapter.HierarchyViewHolder holder, HierarchyItem item, int position) {
         HierarchyItem previousItem = getPreviousItem(position);
         if (item.getLevel() > 0
                 && previousItem != null
@@ -239,7 +239,7 @@ public class HierarchyAdapterHelper<T extends HierarchyItem, VH extends Recycler
         }
     }
 
-    void drawUnderCircleVerticalLine(RecyclerViewHierarchyAdapter.HierarchyViewHolder holder, HierarchyItem item, int position) {
+    void drawUnderCircleVerticalLine(ListViewHierarchyAdapter.HierarchyViewHolder holder, HierarchyItem item, int position) {
         HierarchyItem nextItem = getNextItem(position);
         if (nextItem != null && nextItem.getParentKey().equals(item.getKey())) {
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(underCircleLineWidth, underCircleLineHeight);
@@ -255,7 +255,7 @@ public class HierarchyAdapterHelper<T extends HierarchyItem, VH extends Recycler
         }
     }
 
-    void removeAllDrawables(RecyclerViewHierarchyAdapter.HierarchyViewHolder holder) {
+    void removeAllDrawables(ListViewHierarchyAdapter.HierarchyViewHolder holder) {
         if (linesViewIds.size() > 0) {
             View viewById;
             for (Integer viewId : linesViewIds) {
@@ -268,7 +268,7 @@ public class HierarchyAdapterHelper<T extends HierarchyItem, VH extends Recycler
     }
 
 
-    void drawAddditionalTopVerticalLine(RecyclerViewHierarchyAdapter.HierarchyViewHolder holder, HierarchyItem item, int position) {
+    void drawAddditionalTopVerticalLine(ListViewHierarchyAdapter.HierarchyViewHolder holder, HierarchyItem item, int position) {
         int locLevel = item.getLevel();
         String[] grandParents = item.getGrandParentalKeys();
         int locMargin = leftMargin;
@@ -291,7 +291,7 @@ public class HierarchyAdapterHelper<T extends HierarchyItem, VH extends Recycler
         }
     }
 
-    void drawAdditionalBottomVerticalLine(RecyclerViewHierarchyAdapter.HierarchyViewHolder holder, HierarchyItem item, int position) {
+    void drawAdditionalBottomVerticalLine(ListViewHierarchyAdapter.HierarchyViewHolder holder, HierarchyItem item, int position) {
         int locLevel = item.getLevel();
         String[] grandParents = item.getGrandParentalKeys();
         int locMargin = leftMargin;
@@ -365,7 +365,7 @@ public class HierarchyAdapterHelper<T extends HierarchyItem, VH extends Recycler
 
     private T getPreviousItem(int position) {
         int previousPosition = position - 1;
-        if (previousPosition >= 0 && previousPosition < getAdapter().getItemCount()) {
+        if (previousPosition >= 0 && previousPosition < getAdapter().getCount()) {
             return (T) getAdapter().getItems().get(previousPosition);
         }
         return null;
@@ -373,14 +373,14 @@ public class HierarchyAdapterHelper<T extends HierarchyItem, VH extends Recycler
 
     private T getNextItem(int position) {
         int nextPosition = position + 1;
-        if (nextPosition >= 0 && nextPosition < getAdapter().getItemCount()) {
+        if (nextPosition >= 0 && nextPosition < getAdapter().getCount()) {
             return (T) getAdapter().getItems().get(nextPosition);
         }
         return null;
     }
 
     private T getItem(int position) {
-        if (position < getAdapter().getItemCount()) {
+        if (position < getAdapter().getCount()) {
             return (T) getAdapter().getItems().get(position);
         }
         return null;

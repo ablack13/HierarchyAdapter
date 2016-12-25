@@ -15,14 +15,14 @@ import java.util.List;
  */
 
 public abstract class RecyclerViewHierarchyAdapter<T extends HierarchyItem, VH extends RecyclerViewHierarchyAdapter.HierarchyViewHolder> extends RecyclerView.Adapter<VH>
-        implements IHierarchyAdapter<T, VH> {
+        implements IHierarchyRecyclerAdapter<T, VH> {
     @NonNull
     private ArrayList<T> items;
-    private HierarchyAdapterHelper adapterHelper;
+    private HierarchyRecyclerViewAdapterHelper adapterHelper;
 
     public RecyclerViewHierarchyAdapter(Context context) {
         items = new ArrayList<>();
-        adapterHelper = new HierarchyAdapterHelper<>(context, this);
+        adapterHelper = new HierarchyRecyclerViewAdapterHelper<>(context, this);
     }
 
     @Override
