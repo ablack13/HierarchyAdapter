@@ -137,7 +137,7 @@ public class HierarchyAdapterHelper {
 
     void drawLeftHorizontalLine(HierarchyAdapter.ViewHolder holder, Item item, int position) {
         Item previousItem = getAdapter().getPreviousItem(position);
-        if (item.level > 0 && previousItem != null && (previousItem.name.equals(item.parent) || previousItem.parent.equals(item.parent))) {
+        if (item.level > 0 && previousItem != null && (previousItem.name.equals(item.parent) || previousItem.parent.equals(item.parent) || hasPreviousLevelItem(item, position))) {
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(leftHorizontalLineWidth, leftHorizontalLineHeight);
             params.addRule(RelativeLayout.LEFT_OF, R.id.iv_icon);
             params.addRule(RelativeLayout.CENTER_VERTICAL);
