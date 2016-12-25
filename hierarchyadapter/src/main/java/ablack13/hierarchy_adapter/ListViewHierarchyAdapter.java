@@ -94,18 +94,10 @@ public abstract class ListViewHierarchyAdapter<T extends HierarchyItem, VH exten
     public abstract int getItemViewType(int position);
 
 
-    public static class ViewHolder {
+    public static class DropDownHierarchyViewHolder<F, D> {
         public View itemView;
 
-        public ViewHolder(View itemView) {
-            this.itemView = itemView;
-        }
-    }
-
-    public static class DropDownViewHolder<F, D> {
-        public View itemView;
-
-        public DropDownViewHolder(View itemView) {
+        public DropDownHierarchyViewHolder(View itemView) {
             this.itemView = itemView;
         }
     }
@@ -113,16 +105,16 @@ public abstract class ListViewHierarchyAdapter<T extends HierarchyItem, VH exten
     @Override
     public View getDropDownView(int position, View convertView, ViewGroup parent) {
         if (dropDownViewHolder != null) {
-            DropDownViewHolder viewHolder = null;
+            DropDownHierarchyViewHolder viewHolder = null;
             if (convertView == null) {
-                viewHolder = dropDownViewHolder.onCreateDropDownViewHolder(parent, getItemViewType(position));
+                viewHolder = dropDownViewHolder.onCreateDropDownHierarchyViewHolder(parent, getItemViewType(position));
                 convertView = viewHolder.itemView;
                 convertView.setTag(viewHolder);
             } else {
-                viewHolder = (DropDownViewHolder) convertView.getTag();
+                viewHolder = (DropDownHierarchyViewHolder) convertView.getTag();
             }
             if (getItem(position) != null) {
-                dropDownViewHolder.onBindDropDownViewHolder(viewHolder, getItem(position), position);
+                dropDownViewHolder.onBindDropDownHierarchyViewHolder(viewHolder, getItem(position), position);
             }
             return convertView;
         } else {
@@ -130,12 +122,11 @@ public abstract class ListViewHierarchyAdapter<T extends HierarchyItem, VH exten
         }
     }
 
-    public interface DropDownViewHolderSupport<T, VH extends ListViewHierarchyAdapter.DropDownViewHolder> {
-        void onBindDropDownViewHolder(VH viewHolder, T item, int position);
+    public interface DropDownViewHolderSupport<T, VH extends DropDownHierarchyViewHolder> {
+        void onBindDropDownHierarchyViewHolder(VH viewHolder, T item, int position);
 
-        VH onCreateDropDownViewHolder(ViewGroup parent, int viewType);
+        VH onCreateDropDownHierarchyViewHolder(ViewGroup parent, int viewType);
     }
-    //---------------------------------------
 
     public static abstract class HierarchyViewHolder implements IHierarchyViewHolder {
         public View itemView;
