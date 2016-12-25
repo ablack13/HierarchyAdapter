@@ -8,12 +8,12 @@ public class Item {
     public String name;
     public int level;
     public String parent;
-    private String[] parents;
+    String[] grandParents;
 
     public Item(String name, int level, String parent, String... topParents) {
         this.name = name;
         this.level = level;
         this.parent = parent;
-        this.parents = topParents;
+        this.grandParents = topParents;
     }
 }

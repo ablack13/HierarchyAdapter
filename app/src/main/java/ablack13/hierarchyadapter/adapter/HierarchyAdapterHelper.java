@@ -79,6 +79,17 @@ public class HierarchyAdapterHelper {
         }
     }
 
+    void onDettach() {
+        if (adapter != null) {
+            adapter.clear();
+            adapter = null;
+        }
+        if (linesViewIds != null && linesViewIds.size() > 0) {
+            linesViewIds.clear();
+            linesViewIds = null;
+        }
+    }
+
     private HierarchyAdapter getAdapter() {
         return adapter != null ? adapter.get() : null;
     }
@@ -108,7 +119,7 @@ public class HierarchyAdapterHelper {
     void drawBottomVerticalLine(HierarchyAdapter.ViewHolder holder, Item item, int position) {
         int locLevel = item.level;
         Item nextItem = getAdapter().getNextItem(position);
-        if (!item.parent.equals(ROOT) && nextItem != null && nextItem.parent.equals(item.parent)) {
+        if (!item.parent.equals(ROOT) && (nextItem != null && nextItem.parent.equals(item.parent) || hasNextLevelItem(item, position))) {
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(bottomVerticalLineWidth, bottomVerticalLineHeight);
             params.addRule(RelativeLayout.LEFT_OF, R.id.iv_icon);
             params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
@@ -119,6 +130,8 @@ public class HierarchyAdapterHelper {
             holder.rlContent.addView(view, bottomVerticalLineWidth, bottomVerticalLineHeight);
             view.setLayoutParams(params);
             linesViewIds.add(bottomVerticalLineViewId + locLevel);
+
+//            drawAdditionalBottomVerticalLine(holder, item, position);
         }
     }
 
@@ -165,5 +178,38 @@ public class HierarchyAdapterHelper {
                 }
             }
         }
+    }
+
+    void drawAdditionalBottomVerticalLine(HierarchyAdapter.ViewHolder holder, Item item, int position) {
+        String[] parents = item.grandParents;
+        if (parents != null && parents.length > 0) {
+            int locLevel = item.level;
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(bottomVerticalLineWidth, bottomVerticalLineHeight);
+            params.addRule(RelativeLayout.LEFT_OF, R.id.iv_icon);
+            params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+            params.rightMargin = bottomVerticalLineRightMargin;// + locMargin;
+            View view = new View(holder.rlContent.getContext());
+            view.setId(bottomVerticalLineViewId + locLevel);
+            view.setBackgroundColor(Color.GREEN);
+            holder.rlContent.addView(view, bottomVerticalLineWidth, bottomVerticalLineHeight);
+            view.setLayoutParams(params);
+            linesViewIds.add(bottomVerticalLineViewId + locLevel);
+        }
+    }
+
+    private boolean hasNextLevelItem(Item item, int position) {
+        boolean hasNextLevelItem = false;
+        for (int i = position + 1; i < getAdapter().getItems().size(); i++) {
+            Item tempItem = getAdapter().getItem(i);
+            if (tempItem != null && tempItem.parent.equals(item.parent)) {
+                hasNextLevelItem = true;
+                break;
+            }
+        }
+        return hasNextLevelItem;
+    }
+
+    private Item nextChildItem(Item item, int position) {
+        return null;
     }
 }

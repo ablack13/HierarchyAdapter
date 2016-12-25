@@ -27,6 +27,13 @@ public class HierarchyAdapter extends RecyclerView.Adapter<HierarchyAdapter.View
         adapterHelper = new HierarchyAdapterHelper(context, this);
     }
 
+    @Override
+    public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView);
+        if (adapterHelper != null) {
+            adapterHelper.onDettach();
+        }
+    }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -47,6 +54,7 @@ public class HierarchyAdapter extends RecyclerView.Adapter<HierarchyAdapter.View
             adapterHelper.drawLeftHorizontalLine(holder, item, position);
         }
     }
+
 
     public Item getItem(int position) {
         if (position < getItemCount()) {
@@ -71,25 +79,13 @@ public class HierarchyAdapter extends RecyclerView.Adapter<HierarchyAdapter.View
         return null;
     }
 
-
-    public Item getNextLevelItem(int position) {
-        Item item = getItem(position);
-        Item nextLevelItem = null;
-        if (item != null) {
-            for (int i = position; i < getItemCount(); i++) {
-                Item nextItem = getNextItem(i);
-                if (nextItem != null && nextItem.level == item.level) {
-                    nextLevelItem = nextItem;
-                    break;
-                }
-            }
-        }
-        return nextLevelItem;
-    }
-
     public void setItems(List<Item> items) {
         this.items = (ArrayList<Item>) items;
         notifyDataSetChanged();
+    }
+
+    public List<Item> getItems() {
+        return items;
     }
 
     @Override
