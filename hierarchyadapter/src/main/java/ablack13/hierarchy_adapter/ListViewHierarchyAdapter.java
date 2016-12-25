@@ -93,15 +93,6 @@ public abstract class ListViewHierarchyAdapter<T extends HierarchyItem, VH exten
 
     public abstract int getItemViewType(int position);
 
-
-    public static class DropDownHierarchyViewHolder<F, D> {
-        public View itemView;
-
-        public DropDownHierarchyViewHolder(View itemView) {
-            this.itemView = itemView;
-        }
-    }
-
     @Override
     public View getDropDownView(int position, View convertView, ViewGroup parent) {
         if (dropDownViewHolder != null) {
@@ -134,6 +125,18 @@ public abstract class ListViewHierarchyAdapter<T extends HierarchyItem, VH exten
         RelativeLayout rlContent;
 
         public HierarchyViewHolder(View itemView) {
+            this.itemView = itemView;
+            this.margin = itemView.findViewById(getMarginViewId());
+            this.rlContent = (RelativeLayout) itemView.findViewById(getRelativeLayoutContentViewId());
+        }
+    }
+
+    public static abstract class DropDownHierarchyViewHolder implements IHierarchyViewHolder {
+        public View itemView;
+        View margin;
+        RelativeLayout rlContent;
+
+        public DropDownHierarchyViewHolder(View itemView) {
             this.itemView = itemView;
             this.margin = itemView.findViewById(getMarginViewId());
             this.rlContent = (RelativeLayout) itemView.findViewById(getRelativeLayoutContentViewId());
