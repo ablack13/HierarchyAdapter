@@ -9,23 +9,32 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:weightSum="3">
 
         <Button
             android:id="@+id/btn_load_recyclerview"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.5"
+            android:layout_weight="1"
             android:onClick="loadRecyclerViewFragment"
             android:text="Recycler View" />
 
         <Button
-            android:onClick="loadListViewFragment"
             android:id="@+id/btn_load_listview"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.5"
+            android:layout_weight="1"
+            android:onClick="loadListViewFragment"
             android:text="List View" />
+
+        <Button
+            android:id="@+id/btn_load_spinner"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="loadSpinnerFragment"
+            android:text="Spinner" />
     </LinearLayout>
 
     <FrameLayout

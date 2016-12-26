@@ -77,14 +77,14 @@ public abstract class ListViewHierarchyAdapter<T extends HierarchyItem, VH exten
         }
         T item = getItem(position);
         if (item != null) {
-            adapterHelper.setLeftMargin(holder, item);
-
-            adapterHelper.removeAllDrawables(holder);
-            adapterHelper.drawTopVerticalLine(holder, item, position);
-            adapterHelper.drawBottomVerticalLine(holder, item, position);
-            adapterHelper.drawUnderCircleVerticalLine(holder, item, position);
-            adapterHelper.drawLeftHorizontalLine(holder, item, position);
-
+            if (holder.rlContent != null && holder.margin != null && holder.getLevelingViewId() != 0) {
+                adapterHelper.setLeftMargin(holder, item);
+                adapterHelper.removeAllDrawables(holder);
+                adapterHelper.drawTopVerticalLine(holder, item, position);
+                adapterHelper.drawBottomVerticalLine(holder, item, position);
+                adapterHelper.drawUnderCircleVerticalLine(holder, item, position);
+                adapterHelper.drawLeftHorizontalLine(holder, item, position);
+            }
             onBindHierarchyViewHolder(holder, position);
         }
         return convertView;
@@ -96,16 +96,25 @@ public abstract class ListViewHierarchyAdapter<T extends HierarchyItem, VH exten
     @Override
     public View getDropDownView(int position, View convertView, ViewGroup parent) {
         if (dropDownViewHolder != null) {
-            DropDownHierarchyViewHolder viewHolder = null;
+            DropDownHierarchyViewHolder holder = null;
             if (convertView == null) {
-                viewHolder = dropDownViewHolder.onCreateDropDownHierarchyViewHolder(parent, getItemViewType(position));
-                convertView = viewHolder.itemView;
-                convertView.setTag(viewHolder);
+                holder = dropDownViewHolder.onCreateDropDownHierarchyViewHolder(parent, getItemViewType(position));
+                convertView = holder.itemView;
+                convertView.setTag(holder);
             } else {
-                viewHolder = (DropDownHierarchyViewHolder) convertView.getTag();
+                holder = (DropDownHierarchyViewHolder) convertView.getTag();
             }
-            if (getItem(position) != null) {
-                dropDownViewHolder.onBindDropDownHierarchyViewHolder(viewHolder, getItem(position), position);
+            T item = getItem(position);
+            if (item != null) {
+                if (holder.rlContent != null && holder.margin != null && holder.getLevelingViewId() != 0) {
+                    adapterHelper.setLeftMargin(holder, item);
+                    adapterHelper.removeAllDrawables(holder);
+                    adapterHelper.drawTopVerticalLine(holder, item, position);
+                    adapterHelper.drawBottomVerticalLine(holder, item, position);
+                    adapterHelper.drawUnderCircleVerticalLine(holder, item, position);
+                    adapterHelper.drawLeftHorizontalLine(holder, item, position);
+                }
+                dropDownViewHolder.onBindDropDownHierarchyViewHolder(holder, position);
             }
             return convertView;
         } else {
@@ -114,7 +123,7 @@ public abstract class ListViewHierarchyAdapter<T extends HierarchyItem, VH exten
     }
 
     public interface DropDownViewHolderSupport<T, VH extends DropDownHierarchyViewHolder> {
-        void onBindDropDownHierarchyViewHolder(VH viewHolder, T item, int position);
+        void onBindDropDownHierarchyViewHolder(VH viewHolder, int position);
 
         VH onCreateDropDownHierarchyViewHolder(ViewGroup parent, int viewType);
     }
@@ -131,15 +140,9 @@ public abstract class ListViewHierarchyAdapter<T extends HierarchyItem, VH exten
         }
     }
 
-    public static abstract class DropDownHierarchyViewHolder implements IHierarchyViewHolder {
-        public View itemView;
-        View margin;
-        RelativeLayout rlContent;
-
+    public static abstract class DropDownHierarchyViewHolder extends HierarchyViewHolder implements IHierarchyViewHolder {
         public DropDownHierarchyViewHolder(View itemView) {
-            this.itemView = itemView;
-            this.margin = itemView.findViewById(getMarginViewId());
-            this.rlContent = (RelativeLayout) itemView.findViewById(getRelativeLayoutContentViewId());
+            super(itemView);
         }
     }
 }

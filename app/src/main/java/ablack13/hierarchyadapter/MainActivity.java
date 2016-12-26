@@ -28,4 +28,10 @@ public class MainActivity extends AppCompatActivity {
                 .commitAllowingStateLoss();
     }
 
+    public void loadSpinnerFragment(View view) {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fl_container, SpinnerExampleFragment.newInstance())
+                .commitAllowingStateLoss();
+    }
+
 }
