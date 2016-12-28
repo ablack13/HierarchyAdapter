@@ -13,6 +13,5 @@
     <dimen name="hierarchy_leftHorizontalLineWidth">8dp</dimen>
     <dimen name="hierarchy_leftHorizontalLineHeight">2dp</dimen>
     <dimen name="hierarchy_leftHorizontalLineRightMargin">2dp</dimen>
-
-    <color name="hierarchy_lineColor">#a33939</color>
+    <attr name="hierarchy_lineColor" format="reference|color">#a33939</attr>
 </resources>
