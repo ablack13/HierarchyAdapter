@@ -1,6 +1,7 @@
 package ablack13.hierarchy_adapter;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
@@ -58,7 +59,11 @@ class HierarchyRecyclerViewAdapterHelper<T extends HierarchyItem, VH extends Rec
         this.leftHorizontalLineWidth = (int) context.getResources().getDimension(R.dimen.hierarchy_leftHorizontalLineWidth);
         this.leftHorizontalLineHeight = (int) context.getResources().getDimension(R.dimen.hierarchy_leftHorizontalLineHeight);
         this.leftHorizontalLineRightMargin = (int) context.getResources().getDimension(R.dimen.hierarchy_leftHorizontalLineRightMargin);
-        this.lineColor = context.getResources().getColor(R.color.hierarchy_lineColor);
+
+        TypedArray typedArray = context.getTheme().obtainStyledAttributes(new int[]{R.attr.isLightTheme});
+        boolean isLightTheme = typedArray.getBoolean(0, true);
+        typedArray.recycle();
+        this.lineColor = context.getResources().getColor(isLightTheme ? R.color.hierarchy_lineColor_light : R.color.hierarchy_lineColor_dark);
 
         topVerticalLineViewId = generateViewId();
         bottomVerticalLineViewId = generateViewId();
@@ -66,78 +71,6 @@ class HierarchyRecyclerViewAdapterHelper<T extends HierarchyItem, VH extends Rec
         leftHorizontalLineViewId = generateViewId();
 
         linesViewIds = new ArrayList<>();
-    }
-
-    public void setLineColor(int lineColor) {
-        this.lineColor = lineColor;
-    }
-
-    public void setLeftMargin(int leftMargin) {
-        this.leftMargin = (int) (leftMargin * density);
-    }
-
-    public void setUnderCircleLineWidth(int underCircleLineWidth) {
-        this.underCircleLineWidth = (int) (underCircleLineWidth * density);
-    }
-
-    public void setUnderCircleLineHeight(int underCircleLineHeight) {
-        this.underCircleLineHeight = (int) (underCircleLineHeight * density);
-    }
-
-    public void setUnderCircleLineRightMargin(int underCircleLineRightMargin) {
-        this.underCircleLineRightMargin = (int) (underCircleLineRightMargin * density);
-    }
-
-    public void setTopVerticalLineWidth(int topVerticalLineWidth) {
-        this.topVerticalLineWidth = (int) (topVerticalLineWidth * density);
-    }
-
-    public void setTopVerticalLineHeight(int topVerticalLineHeight) {
-        this.topVerticalLineHeight = (int) (topVerticalLineHeight * density);
-    }
-
-    public void setTopVerticalLineRightMargin(int topVerticalLineRightMargin) {
-        this.topVerticalLineRightMargin = (int) (topVerticalLineRightMargin * density);
-    }
-
-    public void setBottomVerticalLineWidth(int bottomVerticalLineWidth) {
-        this.bottomVerticalLineWidth = (int) (bottomVerticalLineWidth * density);
-    }
-
-    public void setBottomVerticalLineHeight(int bottomVerticalLineHeight) {
-        this.bottomVerticalLineHeight = (int) (bottomVerticalLineHeight * density);
-    }
-
-    public void setBottomVerticalLineRightMargin(int bottomVerticalLineRightMargin) {
-        this.bottomVerticalLineRightMargin = (int) (bottomVerticalLineRightMargin * density);
-    }
-
-    public void setLeftHorizontalLineWidth(int leftHorizontalLineWidth) {
-        this.leftHorizontalLineWidth = (int) (leftHorizontalLineWidth * density);
-    }
-
-    public void setLeftHorizontalLineHeight(int leftHorizontalLineHeight) {
-        this.leftHorizontalLineHeight = (int) (leftHorizontalLineHeight * density);
-    }
-
-    public void setLeftHorizontalLineRightMargin(int leftHorizontalLineRightMargin) {
-        this.leftHorizontalLineRightMargin = (int) (leftHorizontalLineRightMargin * density);
-    }
-
-    public void setTopVerticalLineViewId(int topVerticalLineViewId) {
-        this.topVerticalLineViewId = (int) (topVerticalLineViewId * density);
-    }
-
-    public void setBottomVerticalLineViewId(int bottomVerticalLineViewId) {
-        this.bottomVerticalLineViewId = (int) (bottomVerticalLineViewId * density);
-    }
-
-    public void setLeftHorizontalLineViewId(int leftHorizontalLineViewId) {
-        this.leftHorizontalLineViewId = (int) (leftHorizontalLineViewId * density);
-    }
-
-    public void setUnderCircleVerticalLineViewId(int underCircleVerticalLineViewId) {
-        this.underCircleVerticalLineViewId = (int) (underCircleVerticalLineViewId * density);
     }
 
     private int generateViewId() {

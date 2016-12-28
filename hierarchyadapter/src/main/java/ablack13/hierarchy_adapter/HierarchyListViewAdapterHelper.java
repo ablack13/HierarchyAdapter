@@ -1,6 +1,7 @@
 package ablack13.hierarchy_adapter;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
@@ -58,7 +59,11 @@ class HierarchyListViewAdapterHelper<T extends HierarchyItem, VH extends ListVie
         this.leftHorizontalLineWidth = (int) context.getResources().getDimension(R.dimen.hierarchy_leftHorizontalLineWidth);
         this.leftHorizontalLineHeight = (int) context.getResources().getDimension(R.dimen.hierarchy_leftHorizontalLineHeight);
         this.leftHorizontalLineRightMargin = (int) context.getResources().getDimension(R.dimen.hierarchy_leftHorizontalLineRightMargin);
-        this.lineColor = context.getResources().getColor(R.color.hierarchy_lineColor);
+
+        TypedArray typedArray = context.getTheme().obtainStyledAttributes(new int[]{R.attr.isLightTheme});
+        boolean isLightTheme = typedArray.getBoolean(0, true);
+        typedArray.recycle();
+        this.lineColor = context.getResources().getColor(isLightTheme ? R.color.hierarchy_lineColor_light : R.color.hierarchy_lineColor_dark);
 
         topVerticalLineViewId = generateViewId();
         bottomVerticalLineViewId = generateViewId();

@@ -3,4 +3,7 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <color name="hierarchy_lineColor_light">#1425be</color>
+    <color name="hierarchy_lineColor_dark">#ffee00</color>
 </resources>
