@@ -17,6 +17,6 @@ allprojects {
 Step 2. Add the dependency
 ```java
 dependencies {
-	         compile 'com.github.ablack13:HierarchyAdapter:0.3b'
+	         compile 'com.github.ablack13:HierarchyAdapter:0.3.2'
 	}
 ```
