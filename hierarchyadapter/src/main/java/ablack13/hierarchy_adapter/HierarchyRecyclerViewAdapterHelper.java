@@ -203,10 +203,11 @@ class HierarchyRecyclerViewAdapterHelper<T extends HierarchyItem, VH extends Rec
 
     void drawAddditionalTopVerticalLine(RecyclerViewHierarchyAdapter.HierarchyViewHolder holder, HierarchyItem item, int position) {
         int locLevel = item.getLevel();
-        String[] grandParents = item.getGrandParentalKeys();
+        String[] parents = item.getParentalKeys();
         int locMargin = leftMargin;
-        if (item.getLevel() > 0 && grandParents != null && grandParents.length > 0) {
-            for (String grandParent : grandParents) {
+        if (item.getLevel() > 0 && parents != null && parents.length > 1) {
+            for (int i = 1; i < parents.length; i++) {
+                String grandParent = parents[i];
                 if (hasPreviousParent(grandParent, position) && hasNextChild(grandParent, position)) {
                     RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(topVerticalLineWidth, topVerticalLineHeight);
                     params.addRule(RelativeLayout.LEFT_OF, holder.getLevelingViewId());
@@ -226,10 +227,11 @@ class HierarchyRecyclerViewAdapterHelper<T extends HierarchyItem, VH extends Rec
 
     void drawAdditionalBottomVerticalLine(RecyclerViewHierarchyAdapter.HierarchyViewHolder holder, HierarchyItem item, int position) {
         int locLevel = item.getLevel();
-        String[] grandParents = item.getGrandParentalKeys();
+        String[] parents = item.getParentalKeys();
         int locMargin = leftMargin;
-        if (item.getLevel() > 0 && grandParents != null && grandParents.length > 0) {
-            for (String grandParent : grandParents) {
+        if (item.getLevel() > 0 && parents != null && parents.length > 1) {
+            for (int i = 1; i < parents.length; i++) {
+                String grandParent = parents[i];
                 if (hasPreviousParent(grandParent, position) && hasNextChild(grandParent, position)) {
                     RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(bottomVerticalLineWidth, bottomVerticalLineHeight);
                     params.addRule(RelativeLayout.LEFT_OF, holder.getLevelingViewId());

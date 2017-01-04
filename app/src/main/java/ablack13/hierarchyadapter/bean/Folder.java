@@ -9,8 +9,8 @@ import ablack13.hierarchy_adapter.HierarchyItem;
 public class Folder extends HierarchyItem {
     private String name;
 
-    public Folder(String key, int level, String parentKey, String... grandParentalKeys) {
-        super(key, level, parentKey, grandParentalKeys);
+    public Folder(String key, int level, String... parentalKeys) {
+        super(key, level, parentalKeys);
         this.name = key;
     }
 
