@@ -1,4 +1,4 @@
-# HierarchyAdapter for ListView (+bonus DropDown support) & RecyclerView
+# HierarchyAdapter for RecyclerView and ListView with DropDown support
 <img src="https://github.com/ablack13/HierarchyAdapter/blob/master/screenshot.jpeg"/>
 
 
@@ -17,6 +17,6 @@ allprojects {
 Step 2. Add the dependency
 ```java
 dependencies {
-	         compile 'com.github.ablack13:HierarchyAdapter:0.3b'
+	         compile 'com.github.ablack13:HierarchyAdapter:0.3.2'
 	}
 ```
