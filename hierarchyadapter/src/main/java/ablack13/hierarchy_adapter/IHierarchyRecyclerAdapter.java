@@ -16,6 +16,7 @@ interface IHierarchyRecyclerAdapter<T extends HierarchyItem, VH extends Recycler
     VH onCreateHierarchyViewHolder(ViewGroup parent, int viewType);
 
     void setItems(List<T> items);
+    void setItemsWithoutDataNotify(List<T> items);
 
     List<T> getItems();
 }

@@ -45,11 +45,18 @@ public abstract class RecyclerViewHierarchyAdapter<T extends HierarchyItem, VH e
 
     @Override
     public void setItems(List<T> items) {
-        this.items = (ArrayList<T>) items;
+        setItemsWithoutDataNotify(items);
         notifyDataSetChanged();
     }
 
     @Override
+    public void setItemsWithoutDataNotify(List<T> items) {
+        this.items = (ArrayList<T>) items;
+    }
+
+
+    @Override
+
     public VH onCreateViewHolder(ViewGroup parent, int viewType) {
         return onCreateHierarchyViewHolder(parent, viewType);
     }

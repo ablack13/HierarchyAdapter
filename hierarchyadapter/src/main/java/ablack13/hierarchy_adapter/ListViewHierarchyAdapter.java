@@ -51,8 +51,13 @@ public abstract class ListViewHierarchyAdapter<T extends HierarchyItem, VH exten
 
     @Override
     public void setItems(List<T> items) {
-        this.items = (ArrayList<T>) items;
+        setItemsWithoutDataNotify(items);
         notifyDataSetChanged();
+    }
+
+    @Override
+    public void setItemsWithoutDataNotify(List<T> items) {
+        this.items = (ArrayList<T>) items;
     }
 
     public List<T> getItems() {
