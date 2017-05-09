@@ -21,7 +21,7 @@ dependencies {
 	}
 ```
 
-###License
+## License
 <pre>
 Copyright 2017 Andrew Prayzner (ablack13)
 
